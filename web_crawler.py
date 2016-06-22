@@ -4,6 +4,7 @@ import requests
 import sys
 import time
 import os
+import argparse
 links=[]
 emails=[]
 box=queue.Queue(maxsize=10)
@@ -25,6 +26,7 @@ class Newlink(threading.Thread):
         try:
             req=requests.get(self.url)
             if req.status_code == 200:
+
                 getlinks=link_re.findall(req.text)
                 getemails=email_re.findall(req.text)
 
@@ -72,11 +74,15 @@ class Newlink(threading.Thread):
             pass
         
 if __name__ == "__main__":
+    parser=argparse.ArgumentParser()
+    parser.add_argument('url',help="Please enter the url")
+    purl=parser.parse_args().url
+    #print(purl) 
 
-    url=input("Please enter url(defult=www.google.com.tw):") 
-    if url == "":
-        url="https://www.google.com.tw/" 
-    Newlink(url,cond).start()  
+    #url=input("Please enter url(defult=www.google.com.tw):") 
+    if purl == "default":
+        purl="https://www.google.com.tw/" 
+    Newlink(purl,cond).start()  
     # time.sleep(3) 
     # print (len(links))
     # for i in links:
